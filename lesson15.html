@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright Locator Single Element Example</title>
+    <style>
+        /* Styles for popup message */
+        #popup-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 1.2em;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Single element with multiple attributes for different Playwright locators -->
+<button
+        role="button"
+        title="Submit Button"
+        data-testid="submit-order"
+        id="submit-order"
+        disabled>
+    Place your order
+</button>
+
+<!-- Input fields with labels -->
+<label for="username">Username:</label>
+<input
+        role="textbox"
+        type="text"
+        name="username"
+        id="username"
+        data-testid="username"
+        placeholder="Enter your username" />
+
+<label for="email">Email:</label>
+<input
+        role="textbox"
+        type="email"
+        name="email"
+        id="email"
+        data-testid="email"
+        placeholder="Enter your email" />
+
+<!-- Popup message element -->
+<div id="popup-message">OK</div>
+
+<script>
+    // Function to check input fields and toggle button state
+    function toggleButtonState() {
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const submitButton = document.getElementById('submit-order');
+
+        // Simple email pattern to verify email format
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Enable button if both fields have values and email is valid, otherwise disable it
+        submitButton.disabled = !(username && emailPattern.test(email));
+    }
+
+    // Attach input event listeners to both fields to check their values on change
+    document.getElementById('username').addEventListener('input', toggleButtonState);
+    document.getElementById('email').addEventListener('input', toggleButtonState);
+
+    // JavaScript to handle button click and display "OK" popup for 5 seconds
+    document.getElementById('submit-order').addEventListener('click', function() {
+        const popupMessage = document.getElementById('popup-message');
+        popupMessage.style.display = 'block';
+
+        // Hide the popup message after 5 seconds
+        setTimeout(() => {
+            popupMessage.style.display = 'none';
+        }, 5000);
+    });
+</script>
+
+</body>
+</html>
