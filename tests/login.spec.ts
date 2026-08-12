@@ -1,4 +1,7 @@
 import {test, expect, type Page, Locator} from '@playwright/test';
+import {faker} from "@faker-js/faker";
+const randomUsername = faker.internet.username()
+const randomPassword = faker.internet.password();
 
 test.beforeEach(async ({ page }) => {
     await page.goto(process.env['BASE_URL']!);
@@ -24,23 +27,23 @@ async function expectNotLoggedIn(page: Page, signInUrl: string) {
 }
 
 test('login fails when only username is filled', async ({ page }) => {
-    await attemptLogin(page, 'student', '');
+    await attemptLogin(page, randomUsername, '');
     await expect(page.getByTestId('signIn-button')).toBeDisabled()
 });
 
 test('login fails when only password is filled', async ({ page }) => {
-    await attemptLogin(page, '', 'SomePassword123');
+    await attemptLogin(page, '', randomPassword);
     await expect(page.getByTestId('signIn-button')).toBeDisabled()
 });
 
 [
-    { username: 'no-such-user', password: 'WrongPass123', caseName: 'nonexistent user with wrong password' },
-    { username: '  student  ', password: 'SomePassword123', caseName: 'username surrounded by spaces' },
+    { username: 'no-such-user', password: randomPassword, caseName: 'nonexistent user with wrong password' },
+    { username: '  student  ', password: randomPassword, caseName: 'username surrounded by spaces' },
     { username: 'a'.repeat(512), password: 'b'.repeat(512), caseName: 'excessively long credentials' },
     { username: '!@#$%^&*()', password: '<>?:"{}|', caseName: 'special characters only' },
 ].forEach(({ username, password, caseName }) => {
     test(`login fails for ${caseName}`, async ({ page }) => {
-        const signInUrl = 'https://fe-delivery.tallinn-learning.ee/signin'
+        const signInUrl = `${process.env.BASE_URL}signin`;
         await attemptLogin(page, username, password);
         await expectNotLoggedIn(page, signInUrl);
     });
