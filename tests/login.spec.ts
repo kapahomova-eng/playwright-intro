@@ -62,5 +62,5 @@ test('login fails when one symbol in password', async ({ page }) => {
 
     await page.getByTestId('password-input').fill('s');
     await expect(page.locator('xpath=//*[@id="root"]/div/div[1]/main/form/fieldset[2]/span'))
-        .toHaveText('The field must contain at least of characters: 2')
+        .toHaveText('The field must contain at least of characters: 8')
 });
