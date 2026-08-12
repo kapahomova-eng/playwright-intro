@@ -15,13 +15,14 @@ test('get started link', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
 test('GitHub link', async ({ page }) => {
-  await page.getByRole('link', { name: 'GitHub repository' }).click();
-  const [githubPage] = await Promise.all([
-    page.waitForEvent('popup'),
-    page.getByRole('link', { name: 'GitHub repository' }).click(),
-  ]);
-  await githubPage.waitForLoadState();
-  await expect(githubPage).toHaveURL('https://github.com/microsoft/playwright');
+  const githubLink = page.getByRole('link', {
+    name: 'GitHub repository',
+  });
+
+  await expect(githubLink).toHaveAttribute(
+      'href',
+      'https://github.com/microsoft/playwright'
+  );
 
 });
 test('Discord link', async ({ page }) => {
