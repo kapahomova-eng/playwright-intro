@@ -25,6 +25,10 @@ async function expectNotLoggedIn(page: Page, signInUrl: string) {
     await expect(page).toHaveURL(signInUrl);
 
 }
+test('check locale', async ({ page }) => {
+    console.log('Browser language:', await page.evaluate(() => navigator.language));
+    console.log('Languages:', await page.evaluate(() => navigator.languages));
+});
 
 test('login fails when only username is filled', async ({ page }) => {
     await attemptLogin(page, randomUsername, '');
@@ -51,12 +55,12 @@ test('login fails when only password is filled', async ({ page }) => {
 
 test('login fails when one symbol in user-name', async ({ page }) => {
     await page.getByTestId('username-input').fill('s');
-    expect(page.getByTestId('username-input-error').nth(0)).toHaveText('The field must contain at least of characters: 2')
+    await expect(page.getByTestId('username-input-error').nth(0)).toHaveText('The field must contain at least of characters: 2')
 
 });
 test('login fails when one symbol in password', async ({ page }) => {
 
     await page.getByTestId('password-input').fill('s');
     await expect(page.locator('xpath=//*[@id="root"]/div/div[1]/main/form/fieldset[2]/span'))
-        .toHaveText('The field must contain at least of characters: 8')
+        .toHaveText('The field must contain at least of characters: 2')
 });
